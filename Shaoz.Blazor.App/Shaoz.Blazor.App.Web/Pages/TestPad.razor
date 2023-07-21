@@ -1,0 +1,57 @@
+﻿@page "/testPad"
+
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject ProtectedLocalStorage BrowserStorage
+
+<h1>TestPad</h1>
+
+<h2>Save to local storage</h2>
+<div>
+    <div>
+        Your local storage: <InputText @bind-Value="LocalStorageText" style="width: 500px;"></InputText>
+    </div>
+    <div>
+        <button @onclick="SaveToLocalStorage">Save</button>
+        <button @onclick="ClearLocalStorage">Clear</button>
+    </div>
+</div>
+
+@code {
+    const string LocalStorageKey = "activity";
+    string LocalStorageText { get; set; } = string.Empty;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            LocalStorageText = await Read();
+            StateHasChanged();
+        }
+    }
+
+    async Task SaveToLocalStorage()
+    {
+        await Save(LocalStorageText);
+    }
+
+    async Task ClearLocalStorage()
+    {
+        await Delete();
+    }
+
+    async Task Save(string data)
+    {
+        await BrowserStorage.SetAsync(LocalStorageKey, data);
+    }
+
+    async Task<string> Read()
+    {
+        var result = await BrowserStorage.GetAsync<string>(LocalStorageKey);
+        return result.Value ?? string.Empty;
+    }
+
+    public async Task Delete()
+    {
+        await BrowserStorage.DeleteAsync(LocalStorageKey);
+    }
+}

@@ -1,9 +1,45 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject ProtectedLocalStorage BrowserStorage
 
-<h1>Hello, world to Shaoz's tech assessment</h1>
+<PageTitle>I’m bored</PageTitle>
 
-Welcome to your new app.
+<h1>Bored</h1>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<div>
+    Help me choose something to do:
+    <button @onclick="ChooseNextActivity">Next</button>
+</div>
+<div>
+    Do you wanna: @Activity
+</div>
+<div>
+    <h2>List of activities</h2>
+    <div>
+        <!-- Your activity list goes here-->
+    </div>
+</div>
+
+@code {
+    string Activity { get; set; } = string.Empty;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            // Load the stored activities here
+        }
+
+        await Task.CompletedTask;
+    }
+
+    async Task ChooseNextActivity()
+    {
+        // TODO: Hit it
+
+        await Task.CompletedTask;
+    }
+
+  
+}
